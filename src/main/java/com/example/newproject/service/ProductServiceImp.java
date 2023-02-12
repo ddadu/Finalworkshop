@@ -9,11 +9,10 @@ import com.example.newproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Pageable;
 import javax.persistence.criteria.Predicate;
-import java.awt.print.Pageable;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImp implements ProductService {
@@ -21,7 +20,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Page<Product> getProducts(ProductSearchParams params, Pageable pageable) {
-        return productRepository.findAll((Specification<Product>) (root, query, cb)->{
+        return productRepository.findAll(((root, query, cb)-> {
             Predicate predicate = cb.conjunction();
             if(params.getId() !=null){
                 predicate = cb.and(predicate, cb.equal(root.get(Product_.ID),params.getId()));
@@ -33,9 +32,10 @@ public class ProductServiceImp implements ProductService {
                 predicate = cb.and(predicate, cb.like(root.get(Product_.PRODUCT_NAME), params.getProductName()));
             }
             return predicate;
-        }, (org.springframework.data.domain.Pageable) pageable);
-
+        },pageable);
     }
+
+
     @Override
     public Product getProduct(int id) {
         return productRepository.findById(id)
@@ -57,6 +57,4 @@ public class ProductServiceImp implements ProductService {
         eanCode.setRemaining(eanCode.getRemaining());
         return productRepository.save(eanCode);
     }
-
-
 }
