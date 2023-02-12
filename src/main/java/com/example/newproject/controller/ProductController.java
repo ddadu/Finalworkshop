@@ -1,9 +1,12 @@
 package com.example.newproject.controller;
 
+import com.example.newproject.dto.ProductSearchParams;
 import com.example.newproject.entity.Product;
 import com.example.newproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -14,8 +17,10 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public Product save(@RequestBody Product product){
-        return productService.save(product);
+    public ResponseEntity <Product> addProduct(@RequestBody Product product, ProductSearchParams params){
+        Product registered = productService.addProduct(product, params);
+        var location = UriComponentsBuilder.fromPath("/products/").buildAndExpand(registered.getId()).toUri();
+        return ResponseEntity.created(location).body(product);
     }
     @GetMapping
     public List<Product> findAll(){

@@ -2,7 +2,6 @@ package com.example.newproject.service;
 
 import com.example.newproject.entity.User;
 import com.example.newproject.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

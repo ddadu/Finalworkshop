@@ -1,5 +1,6 @@
 package com.example.newproject.service;
 
+import com.example.newproject.dto.ProductSearchParams;
 import com.example.newproject.entity.Product;
 import com.example.newproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,4 +36,14 @@ public class ProductServiceImp implements ProductService {
         productRepository.deleteById(id);
 
     }
+
+    @Override
+    public Product addProduct(Product product, ProductSearchParams params) {
+        if (product.getEanCode() == null) {
+            product.setEanCode(String.valueOf(Integer.valueOf("default_value")));
+        }
+        return productRepository.save(product);
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.newproject.service;
 
+import com.example.newproject.dto.ProductSearchParams;
 import com.example.newproject.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -11,4 +12,8 @@ public interface ProductService {
     Product save(Product product);
     Product update(Product product);
     void delete(int id);
+
+    Product addProduct(Product product, ProductSearchParams params);
+
+
 }
