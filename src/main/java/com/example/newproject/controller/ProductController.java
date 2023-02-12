@@ -1,14 +1,18 @@
 package com.example.newproject.controller;
 
+
 import com.example.newproject.dto.ProductSearchParams;
 import com.example.newproject.entity.Product;
 import com.example.newproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import java.awt.print.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,18 +21,23 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity <Product> addProduct(@RequestBody Product product, ProductSearchParams params){
-        Product registered = productService.addProduct(product, params);
-        var location = UriComponentsBuilder.fromPath("/products/").buildAndExpand(registered.getId()).toUri();
-        return ResponseEntity.created(location).body(product);
+    public ResponseEntity <Product> addProduct(@RequestBody Product eanCode){
+        productService.addProduct(eanCode);
+        var location = UriComponentsBuilder.fromPath("/products/" + eanCode.getId()).build().toUri();
+        return ResponseEntity.created(location).body(eanCode);
     }
     @GetMapping
-    public List<Product> findAll(){
-        return productService.findAll();
+    public Page<Product> getProducts(@RequestParam(required = false,defaultValue = "1") int page,
+                                     @RequestParam(required = false, defaultValue = "5")int size,
+                                     @RequestParam(required = false, defaultValue = "DESC")Sort.Direction direction,
+                                     @RequestParam(required = false, defaultValue = "ean_code")String field,
+                                     ProductSearchParams params){
+        Sort sorter = Sort.by(direction, field);
+        return productService.getProducts(params, (Pageable) PageRequest.of(page, size, sorter));
     }
     @GetMapping("/{id}")
-    public Product findById(@PathVariable int id){
-        return productService.findById(id);
+    public Product getProduct(@PathVariable int id){
+        return productService.getProduct(id);
     }
     @PutMapping
     public Product update(@RequestBody Product product){

@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Setter
 @Getter
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 @Table(name = "products", schema = "public", catalog = "postgres")
 public class Product {
 
-    private Integer id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    private Integer id;
     @Column(name = "ean_code", nullable = false)
     private String eanCode;
     @Column(name = "product_name")
@@ -28,7 +27,7 @@ public class Product {
     @Column(name = "category_id", nullable = false)
     private Integer categoryId;
     @Column(name = "sell_price")
-    private BigDecimal sellPrice;
+    private Integer sellPrice;
     @Column(name = "remaining")
     private Integer remaining;
     @Column(name = "created_at", nullable = false, updatable = false)
