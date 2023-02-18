@@ -8,9 +8,9 @@ import java.util.List;
 @Service
 
 public interface UserService {
-    User save(User user);
-    User findById(int id);
-    List<User> findAll();
-    User update(User user);
+    User addUser(User user);
+    List<User> getUsers();
+    User update(int id, User user);
     void delete(int id);
+    User getUserById(int id);
 }

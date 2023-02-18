@@ -9,8 +9,9 @@ import com.example.newproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import javax.persistence.criteria.Predicate;
 
 @Service
@@ -20,10 +21,10 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Page<Product> getProducts(ProductSearchParams params, Pageable pageable) {
-        return productRepository.findAll(((root, query, cb)-> {
+        return productRepository.findAll((root, query, cb) -> {
             Predicate predicate = cb.conjunction();
             if(params.getId() !=null){
-                predicate = cb.and(predicate, cb.equal(root.get(Product_.ID),params.getId()));
+                predicate = cb.and(predicate, cb.equal(root.get(Product_.ID), params.getId()));
             }
             if(params.getEanCode() !=null){
                 predicate = cb.and(predicate, cb.equal(root.get(Product_.EAN_CODE), params.getEanCode()));
@@ -31,8 +32,18 @@ public class ProductServiceImp implements ProductService {
             if(StringUtils.isNotEmpty(params.getProductName())){
                 predicate = cb.and(predicate, cb.like(root.get(Product_.PRODUCT_NAME), params.getProductName()));
             }
+            if(params.getCategoryId() != null){
+                predicate = cb.and(predicate, cb.equal(root.get(Product_.CATEGORY_ID), params.getCategoryId()));
+            }
+            if(params.getMakerId() != null){
+                predicate = cb.and(predicate, cb.equal(root.get(Product_.MAKER_ID),params.getMakerId()));
+            }
+            if(params.getSellPrice() != null){
+                predicate = cb.and(predicate, cb.equal(root.get(Product_.SELL_PRICE), params.getSellPrice()));
+            }
             return predicate;
-        },pageable);
+
+        }, pageable);
     }
 
 
@@ -52,9 +63,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product eanCode) {
-        eanCode.setEanCode(eanCode.getEanCode());
-        eanCode.setRemaining(eanCode.getRemaining());
-        return productRepository.save(eanCode);
+    public Product addProduct(Product product) {
+        product.setEanCode(product.getEanCode());
+        return productRepository.save(product);
     }
 }

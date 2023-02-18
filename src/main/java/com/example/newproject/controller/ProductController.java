@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.awt.print.Pageable;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -30,10 +28,10 @@ public class ProductController {
     public Page<Product> getProducts(@RequestParam(required = false,defaultValue = "1") int page,
                                      @RequestParam(required = false, defaultValue = "5")int size,
                                      @RequestParam(required = false, defaultValue = "DESC")Sort.Direction direction,
-                                     @RequestParam(required = false, defaultValue = "ean_code")String field,
+                                     @RequestParam(required = false, defaultValue = "id")String field,
                                      ProductSearchParams params){
         Sort sorter = Sort.by(direction, field);
-        return productService.getProducts(params, (Pageable) PageRequest.of(page, size, sorter));
+        return productService.getProducts(params, PageRequest.of(page, size, sorter));
     }
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable int id){
@@ -44,7 +42,8 @@ public class ProductController {
         return productService.update(product);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public ResponseEntity<Product> delete(@PathVariable int id){
         productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

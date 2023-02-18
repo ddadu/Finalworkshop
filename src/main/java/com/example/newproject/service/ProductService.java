@@ -13,7 +13,7 @@ public interface ProductService {
     Product update(Product product);
     void delete(int id);
 
-    Product addProduct(Product eanCode);
+    Product addProduct(Product product);
 
 
 }

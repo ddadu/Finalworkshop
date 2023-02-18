@@ -12,6 +12,9 @@ import java.time.LocalDate;
 public class ProductSearchParams {
     private Integer id;
     private Integer eanCode;
+    private Integer makerId;
+    private Integer categoryId;
+    private Integer sellPrice;
     private String productName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate createdAt;
